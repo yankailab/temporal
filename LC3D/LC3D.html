@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>LC3D Console</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->	
+	<link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/perfect-scrollbar/perfect-scrollbar.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="css/util.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+<!--===============================================================================================-->
+</head>
+
+<style>
+#messages
+{
+    margin: 1em auto;
+    font-size: 20px;
+    color: white;
+}
+</style>
+
+
+<body>
+	<div class="limiter">
+		<div class="container-table100">
+	
+	<div id="messages" class="messages">LC3D Console: Connecting to server, please launch LC3D.sh and refresh this page</div>
+
+			<div class="wrap-table100">
+				<div class="table100">
+					<table>
+						<thead>
+							<tr class="table100-head">
+								<th class="column1">Module ID</th>
+								<th class="column2">Status</th>
+								<th class="column3">CPU Mode/Freq</th>
+								<th class="column4">MEM</th>
+								<th class="column5">STR</th>
+								<th class="column6">PCN</th>
+							</tr>
+						</thead>
+						<tbody id="moduleTable">
+								<tr>
+									<td class="column1"></td>
+									<td class="column2"></td>
+									<td class="column3"></td>
+									<td class="column4"></td>
+									<td class="column5"></td>
+									<td class="column6"></td>
+								</tr>
+								
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<!--===============================================================================================-->	
+	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/bootstrap/js/popper.js"></script>
+	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+	<script src="js/main.js"></script>
+
+<script>
+window.onload = function() {
+    function $(selector) {
+        return document.querySelector(selector);
+    }
+        
+    var socket = new WebSocket('ws://127.0.0.1:7890');
+
+    socket.onopen = function(event) {
+        $('#messages').innerHTML = 'LC3D console: Auto Connecting';
+        
+        socket.send("Hello");
+    };
+    
+    socket.onmessage = function(event) {
+        $('#messages').innerHTML = 'LC3D console: Connected, Receiving data';
+        
+        var jo = JSON.parse(event.data);
+        var tbl = "";
+        
+        for (var i = 0; i < jo.length; i++)
+        {
+        	tbl += '<tr>'+
+				'<td class="column1">' + jo[i].id + '</td>' +
+				'<td class="column2">' + jo[i].state + '</td>' +
+				'<td class="column3">' + jo[i].cpu + '</td>' +
+				'<td class="column4">' + jo[i].mem + '</td>' +
+				'<td class="column5">' + jo[i].str + '</td>' +
+				'<td class="column6">' + jo[i].pcn + '</td>' +
+			'</tr>';
+  	}
+        
+        $('#moduleTable').innerHTML = tbl;
+    };
+
+    socket.onclose = function(event) {
+        $('#messages').innerHTML = 'LC3D console: Disconnected ' + event.reason;
+    };    
+};
+</script>
+
+
+</body>
+</html>
