@@ -255,22 +255,22 @@ tbody tr:hover {
     top: 0;
   }
   table tbody tr td:nth-child(1):before {
-    content: "Date";
+    content: "Module ID";
   }
   table tbody tr td:nth-child(2):before {
-    content: "Order ID";
+    content: "Status";
   }
   table tbody tr td:nth-child(3):before {
-    content: "Name";
+    content: "CPU Mode/Freq";
   }
   table tbody tr td:nth-child(4):before {
-    content: "Price";
+    content: "MEM";
   }
   table tbody tr td:nth-child(5):before {
-    content: "Quantity";
+    content: "STR";
   }
   table tbody tr td:nth-child(6):before {
-    content: "Total";
+    content: "PCN";
   }
 
   .column4,
